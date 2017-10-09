@@ -3,6 +3,7 @@ package sample;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -36,6 +37,7 @@ public class Controller implements Initializable {
         questionList.add(new Question("Czy Polska to państwo?", true));
         questionList.add(new Question("Czy pies to ssak?", true));
         questionList.add(new Question("Czy java 8 to flagowa werjsa oprogramowania?", false));
+        questionList.add(new Question("Czy notebook i netbook to to samo?", false));
         Collections.shuffle(questionList);
     }
 
@@ -47,6 +49,8 @@ public class Controller implements Initializable {
                if(questionList.get(activeQuestion).isYesCorrect()){
                    activeQuestion++;
                    nextQuestion();
+               }else{
+                   createDialog("Podałeś niepoprawną odpowiedz");
                }
             }
         });
@@ -56,6 +60,8 @@ public class Controller implements Initializable {
                 if(!questionList.get(activeQuestion).isYesCorrect()){
                     activeQuestion++;
                     nextQuestion();
+                }else{
+                    createDialog("Podałeś niepoprawną odpowiedz");
                 }
             }
         });
@@ -63,7 +69,19 @@ public class Controller implements Initializable {
     }
 
     private void nextQuestion() {
+        if(activeQuestion > questionList.size()-1){
+            createDialog("Koniec gry, brawo!");
+            System.exit(0);
+        }
         labelText.setText(questionList.get(activeQuestion).getQuestionText());
+    }
+
+    private void createDialog(String text){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Milionerzy");
+        alert.setHeaderText("");
+        alert.setContentText(text);
+        alert.showAndWait();
     }
 
 }
